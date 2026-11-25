@@ -4,49 +4,51 @@ let myVideo = null;
 let otherVideo;
 let paintLayer;
 
-function setup() {
-  createCanvas(400,400);
-  paintLayer = createGraphics(400,400)
- let constraints = {audio: true, video: true};
-  
-  myVideo = createCapture(VIDEO, 
-    function(stream) {
-	let p5lm = new p5LiveMedia(this, "CAPTURE", stream, "testing101")
-  	p5lm.on('stream', gotStream);
+new p5(sketch);
+
+function sketch(p) {
+  p.setup = function() {
+    p.createCanvas(400, 400);
+    paintLayer = p.createGraphics(400, 400);
+    let constraints = { audio: true, video: true };
+
+    myVideo = p.createCapture(p.VIDEO, function (stream) {
+      let p5lm = new p5LiveMedia(p, "CAPTURE", stream, "testing101");
+      p5lm.on("stream", gotStream);
+    });
+    myVideo.elt.muted = true;
+    p.frameRate(120);
+  }
+
+  function gotStream(stream, id) {
+    otherVideo = stream;
+  }
+
+  p.draw=function() {
+    if (myVideo != null) {
+      p.image(myVideo, 0, 0, p.width / 2, p.height);
+      p.text("My Video", 10, 10);
     }
-  );
-  myVideo.elt.muted = true;
-  frameRate(120);
-}
 
-function gotStream(stream, id){
-  otherVideo = stream;
-}
+    if (otherVideo != null) {
+      p.image(otherVideo, p.width / 2, 0, p.width / 2, p.height);
+      p.text("Their Video", p.width / 2 + 10, 10);
+    }
 
-function draw() {
-  if (myVideo != null) {
-    image(myVideo,0,0,width/2,height);
-    text("My Video", 10, 10);
+    //painting
+    if (p.mouseIsPressed) {
+      paintLayer.stroke(64, 224, 208);
+      paintLayer.strokeWeight(5);
+      //previous positions reference https://p5js.org/reference/p5/pmouseX/
+      paintLayer.line(p.pmouseX, p.pmouseY, p.mouseX, p.mouseY);
+    }
+    //layer OVERLAYimage
+    p.image(paintLayer, 0, 0);
   }
 
-  if (otherVideo != null) {
-    image(otherVideo,width/2,0,width/2,height);
-    text("Their Video", width/2+10, 10);
-  }  
-
-  //painting
-  if (mouseIsPressed){
-    paintLayer.stroke(64,224,208);
-    paintLayer.strokeWeight(5);
-  //previous positions reference https://p5js.org/reference/p5/pmouseX/
-    paintLayer.line(pmouseX, pmouseY, mouseX, mouseY);
-  }
-  //layer OVERLAYimage
-  image(paintLayer, 0,0)
-}
-
-function keyPressed(){
-  if(key === " "){
-    paintLayer.clear();
+  p.keyPressed = function() {
+    if (p.key === " ") {
+      paintLayer.clear();
+    }
   }
 }
