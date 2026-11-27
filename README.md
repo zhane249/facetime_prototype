@@ -28,3 +28,4 @@ In the other, run the server with this command:
 npm run server
 ```
 https://editor.p5js.org/eva.z/sketches/hE9FYZA74 reference for drawing on the other persons feed sending a copy of the x and y coordinates
+

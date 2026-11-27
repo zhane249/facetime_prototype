@@ -2,7 +2,7 @@
 import { createRoot } from "react-dom/client";
 
 import { useState, useEffect } from "react";
-
+import {sketch} from "./face";
 let serverURL;
 
 if (import.meta.env.DEV) {
@@ -16,6 +16,7 @@ let root = createRoot(document.getElementById("app"));
 
 root.render(<App />);
 
+let roomCode = "";
 // Component for defining the app
 function App() {
   let [socket, setSocket] = useState(null);
@@ -26,6 +27,9 @@ function App() {
   // Demo state for storing last message from server
   let [message, setMessage] = useState(null);
 
+  //roomcode
+  let [code, setCode] = useState("");
+  let [joined, setJoined] = useState(false);
   useEffect(() => {
     let newSocket = new WebSocket(serverURL);
 
@@ -48,18 +52,37 @@ function App() {
       setState("disconnected");
     });
   }, []);
+  function joinCall() {
+    if (code.trim() != "" && !joined) {
+      roomCode = code.trim();
+      setJoined(true);
+      new p5((p)=> sketch(p, roomCode));
+    }
+  }
 
   return (
     <>
-      <h1>Assignment 4 Demo</h1>
-      <p>Server is {state}.</p>
-      {message === null ? (
-        <p>No messages received.</p>
-      ) : (
-        <>
-          <p>Last message received:</p>
-          <pre>{message}</pre>
-        </>
+      <h1>Fafil Prototype</h1>
+
+      {joined == false && (
+        <div className="joinScreen">
+          <p>Enter your custom call code</p>
+
+          <input
+            type="text"
+            placeholder="Call code"
+            value={code}
+            onChange={(event) => setCode(event.target.value)}
+          />
+
+          <button onClick={joinCall}>
+            Join Call
+          </button>
+        </div>
+      )}
+
+      {joined == true && (
+        <p>Call code: {code}</p>
       )}
     </>
   );

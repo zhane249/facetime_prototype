@@ -5,9 +5,9 @@ let otherVideo;
 let paintLayer;
 let p5lm;
 let otherPaintLayer;
-new p5(sketch);
 
-function sketch(p) {
+
+export function sketch(p, roomCode) {
   p.setup = function () {
     p.createCanvas(400, 400);
     paintLayer = p.createGraphics(400, 400);
@@ -15,7 +15,7 @@ function sketch(p) {
     let constraints = { audio: true, video: true };
 
     myVideo = p.createCapture(p.VIDEO, function (stream) {
-      p5lm = new p5LiveMedia(p, "CAPTURE", stream, "testing101");
+      p5lm = new p5LiveMedia(p, "CAPTURE", stream, roomCode);
       p5lm.on("stream", gotStream);
       p5lm.on("data", gotData);
     });
@@ -55,7 +55,7 @@ function sketch(p) {
     }
 
     //painting
-    if (p.mouseIsPressed) {
+    if (p.mouseIsPressed && p5lm) {
       paintLayer.stroke(64, 224, 208);
       paintLayer.strokeWeight(5);
       //previous positions reference https://p5js.org/reference/p5/pmouseX/
@@ -76,7 +76,7 @@ function sketch(p) {
   };
 
   p.keyPressed = function () {
-    if (p.key === " ") {
+    if (p.key === " " && p5lm) {
       paintLayer.clear();
       p5lm.send(JSON.stringify({ action: "clear" }));
     }

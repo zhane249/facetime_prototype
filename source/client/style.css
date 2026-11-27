@@ -1,0 +1,22 @@
+.joinScreen{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    height: 80vh;
+}
+.joinScreen input{
+    width: 250px;
+    padding: 15px;
+    font-size: 18px;
+}
+.joinScreen button{
+    padding: 12px 30px;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+h1{
+    text-align: center;
+}
