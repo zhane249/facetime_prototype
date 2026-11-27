@@ -9,9 +9,9 @@ let otherPaintLayer;
 
 export function sketch(p, roomCode) {
   p.setup = function () {
-    p.createCanvas(400, 400);
-    paintLayer = p.createGraphics(400, 400);
-    otherPaintLayer = p.createGraphics(400, 400);
+    p.createCanvas(p.windowWidth, p.windowHeight);
+    paintLayer = p.createGraphics(p.windowWidth, p.windowHeight);;
+    otherPaintLayer = p.createGraphics(p.windowWidth, p.windowHeight);;
     let constraints = { audio: true, video: true };
 
     myVideo = p.createCapture(p.VIDEO, function (stream) {
@@ -45,12 +45,12 @@ export function sketch(p, roomCode) {
   }
   p.draw = function () {
     if (myVideo != null) {
-      p.image(myVideo, 0, 0, p.width / 2, p.height);
+      p.image(myVideo, 0, 0, p.width, p.height);
       p.text("My Video", 10, 10);
     }
 
     if (otherVideo != null) {
-      p.image(otherVideo, p.width / 2, 0, p.width / 2, p.height);
+      p.image(otherVideo, 0, 0, 100, 100);
       p.text("Their Video", p.width / 2 + 10, 10);
     }
 
