@@ -43,6 +43,7 @@ export function sketch(p, roomCode) {
       );
     }
   }
+  //if in viewmode, run viewmode function in p.draw
   p.draw = function () {
     if (myVideo != null) {
       p.image(myVideo, 0, 0, p.width, p.height);
@@ -53,7 +54,7 @@ export function sketch(p, roomCode) {
       p.image(otherVideo, 0, 0, 100, 100);
       p.text("Their Video", p.width / 2 + 10, 10);
     }
-
+//drawmode function only active
     //painting
     if (p.mouseIsPressed && p5lm) {
       paintLayer.stroke(64, 224, 208);
